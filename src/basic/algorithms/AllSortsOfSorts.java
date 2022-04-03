@@ -13,7 +13,7 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		AllSortsOfSorts sorter = new AllSortsOfSorts();
 		
 		List<Integer> array = new ArrayList<>();
-		new BinarySearchWithRandomArray().randomArrayGenerator(array, Size.VARIABLE.getValue(), RANDOM, Max.EXTREME.getValue()); 
+		new BinarySearchWithRandomArray().randomArrayGenerator(array, Size.LARGE.getValue(), RANDOM, Max.LARGE.getValue()); 
 		
 		int[] integerArray = sorter.convertListToArray(array);
 		
@@ -59,15 +59,7 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		int[] heap = sorter.heapSort(integerArray.clone());
 		endTimeInNanos = System.nanoTime();
 		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(heap, tim), "heapSort");
-		
-		/**
-		 * Insertion Sort
-		 */
-		startTimeInNanos = System.nanoTime();
-		int[] insertion = sorter.insertionSort(integerArray.clone());
-		endTimeInNanos = System.nanoTime();
-		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(insertion, tim), "insertionSort");
-		
+				
 		/**
 		 * Counting Sort
 		 */
@@ -85,12 +77,12 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(radix, tim), "radixSort");
 		
 		/**
-		 * Bubble Sort
+		 * Insertion Sort
 		 */
 		startTimeInNanos = System.nanoTime();
-		int[] bubble = sorter.bubbleSort(integerArray.clone());
+		int[] insertion = sorter.insertionSort(integerArray.clone());
 		endTimeInNanos = System.nanoTime();
-		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(bubble, tim), "bubbleSort");
+		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(insertion, tim), "insertionSort");
 		
 		/**
 		 * Selection Sort
@@ -99,6 +91,14 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		int[] selection = sorter.selectionSort(integerArray.clone());
 		endTimeInNanos = System.nanoTime();
 		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(selection, tim), "selectionSort");
+
+		/**
+		 * Bubble Sort
+		 */
+		startTimeInNanos = System.nanoTime();
+		int[] bubble = sorter.bubbleSort(integerArray.clone());
+		endTimeInNanos = System.nanoTime();
+		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(bubble, tim), "bubbleSort");
 
 	}
 	
@@ -324,12 +324,42 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 	
 	@Override
 	public int[] countingSort(int[] input) {
-		return null;
+
+		/*
+		 * Based on our inputs, this value can be as big as 1G i.e the
+		 * below array can get as big as 4GB.
+		 */
+		int max = Arrays.stream(input).max().getAsInt();
+		
+		if(max > Max.LARGE.getValue()) { // 128 * 4 MB -> 512 MB
+			System.err.println("Input has values that may exceed allowed heap space");
+			return input;
+		}
+		
+		int[] count = new int[max + 1];
+		int[] result = new int[input.length];
+		
+		for(int i = 0; i < input.length; i++) {
+			count[input[i]]++;
+		}
+		
+		for(int i = 1; i <= max; i++) {
+			count[i] += count[i-1];
+		}
+		
+		for(int i = input.length - 1; i >= 0; i--) {
+			count[input[i]]--;
+			result[count[input[i]]] = input[i]; 
+		}
+		
+		return result;
+		
 	}
 
 	@Override
 	public int[] radixSort(int[] input) {
-		return null;
+		
+		return input;
 	}
 
 	@Override
@@ -345,20 +375,21 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		}
 		System.out.println("Time taken for executing method with ID " + methodCount + " is " + time + " "+ unit +  " for " + sortType + " with validity " + isValid);
 		
-		//TODO: persist values for each sort across and find weighted average (if required.)
 	}
+	
 	
 	@SuppressWarnings("unused")
 	private void printArray(int[] array, String meta) { // NOSONAR
 		System.out.println(Arrays.toString(array) + " " + meta);
 	}
 	
+	
 	enum Size {
 		TEST(8), 
 		SMALL(512 * 32),
 		NOMINAL(512 * 128), 
 		NORMAL(512 * 512),
-		VARIABLE(512 * 512 * 4),
+		VARIABLE(512 * 512 * 8),
 		MEDIUM(512 * 512 * 32), 
 		LARGE(512 * 512 * 128), 
 		EXTREME(512 * 512 * 512);
@@ -374,9 +405,12 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		}
 	}
 	
+	
 	enum Max {
 		TEST(64), 
 		NORMAL(1024 * 1024), 
+		MEDIUM(1024 * 1024 * 32),
+		LARGE(1024 * 1024 * 128),
 		EXTREME(1024 * 1024 * 1024);
 		
 		private final int value;
