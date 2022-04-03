@@ -1,2 +1,2 @@
 # playground
-Implementations of random basic algorithms. 
+Implementations of random basic algorithms.  
