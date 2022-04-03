@@ -358,7 +358,7 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		SMALL(512 * 32),
 		NOMINAL(512 * 128), 
 		NORMAL(512 * 512),
-		VARIABLE(512 * 512 * 1),
+		VARIABLE(512 * 512 * 4),
 		MEDIUM(512 * 512 * 32), 
 		LARGE(512 * 512 * 128), 
 		EXTREME(512 * 512 * 512);
