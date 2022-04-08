@@ -6,7 +6,7 @@ public class BinarySearchTree {
 
     private BinaryNode root;
     
-    BinarySearchTree(long value) {
+    public BinarySearchTree(long value) {
         this.root = new BinaryNode(value);
         /**
          * Assuming that the root will have a 
@@ -73,6 +73,23 @@ public class BinarySearchTree {
     		inOrder(node.rightChild);
     	}
     }
+
+    public void inOrder(BinaryNode node, int[] array, ReferenceInteger index) {
+        if(node != null) {
+    		inOrder(node.leftChild, array, index);
+    		array[index.value++] = ((Number) node.value).intValue();
+    		inOrder(node.rightChild, array, index);
+    	}
+    }
+
+    public int[] inOrder(int length) {
+        int[] result = new int[length];
+        
+        ReferenceInteger index = new ReferenceInteger(0);
+        inOrder(this.root, result, index);
+
+        return result;
+    }
     
     public void postOrder(BinaryNode node) {
     	if(node != null) {
@@ -113,13 +130,26 @@ public class BinarySearchTree {
     * This exception is thrown if the type of value stored in the
     * node is not of int or long type.  
     */
-    class InvalidBinarySearchKeyTypeException extends Exception {
+    public class InvalidBinarySearchKeyTypeException extends Exception {
 
 		private static final long serialVersionUID = 0L;
 
 		InvalidBinarySearchKeyTypeException() {
 			System.err.println("Only int or long allowed for BSTs");
         }
+    }
+    
+    public class ReferenceInteger {
+    	
+    	private int value;
+    	
+    	public ReferenceInteger(int value) {
+    		this.value = value;
+    	} 
+    	
+    	public int getValue() {
+    		return value;
+    	}
     }
     
     public static void main(String[] args) throws InvalidBinarySearchKeyTypeException {

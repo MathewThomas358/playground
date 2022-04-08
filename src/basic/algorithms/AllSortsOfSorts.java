@@ -1,6 +1,8 @@
 package basic.algorithms;
 
 import java.util.*;
+import basic.datastructures.*;
+import basic.datastructures.BinarySearchTree.InvalidBinarySearchKeyTypeException;
 
 public class AllSortsOfSorts implements AllSortsOfSortsApi {
 
@@ -77,6 +79,14 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(radix, tim), "radixSort");
 		
 		/**
+		 * BinarySearchTree Sort
+		 */
+		startTimeInNanos = System.nanoTime();
+		int[] bst = sorter.bstSort(integerArray.clone());
+		endTimeInNanos = System.nanoTime();
+		sorter.timeTaken(startTimeInNanos, endTimeInNanos, ++methodCount, Arrays.equals(bst, tim), "bstSort");
+		
+		/**
 		 * Insertion Sort
 		 */
 		startTimeInNanos = System.nanoTime();
@@ -102,6 +112,21 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 
 	}
 	
+	private int[] bstSort(int[] input) {
+		
+		BinarySearchTree bst = new BinarySearchTree(input[0]);
+
+		for(int i = 1; i < input.length; i++) {
+			try {
+				bst.insertNode(new BinaryNode(input[i]));
+			} catch (InvalidBinarySearchKeyTypeException e) {
+				// Nothing
+			}
+		}
+		
+		return bst.inOrder(input.length);
+	}
+
 	private int[] convertListToArray(List<Integer> input) {
 		
 		int[] output = new int[input.size()];
@@ -389,7 +414,7 @@ public class AllSortsOfSorts implements AllSortsOfSortsApi {
 		SMALL(512 * 32),
 		NOMINAL(512 * 128), 
 		NORMAL(512 * 512),
-		VARIABLE(512 * 512 * 8),
+		VARIABLE(512 * 512 * 2),
 		MEDIUM(512 * 512 * 32), 
 		LARGE(512 * 512 * 128), 
 		EXTREME(512 * 512 * 512);
