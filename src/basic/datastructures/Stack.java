@@ -27,13 +27,13 @@ public class Stack {
 		}
 	}
 	
-	public Object pop() {
+	public Object pop(boolean printUnderflow) {
 		if(count >= 0) {
 			Object temp = array[count]; 
 			array[count--] = null;
 			return temp;
 		} else {
-			System.out.println("Underflow");
+			if(printUnderflow) System.out.println("Underflow");
 			return null;
 		}
 	}
@@ -79,8 +79,8 @@ public class Stack {
 			
 		}
 		stack.printStack();
-		stack.pop();
-		stack.pop();
+		stack.pop(true);
+		stack.pop(true);
 		stack.printStack();
 	}
 }

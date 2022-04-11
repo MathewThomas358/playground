@@ -14,18 +14,25 @@ public class Queue {
 	
 	public void enqueue(Object data) {
 		
-		this.tail.link = new LinkedListNode(data);
-		this.tail = this.tail.link;
-		
+		if(this.head == null) {
+			this.head = new LinkedListNode(data);
+			this.tail = this.head;
+		} else {	
+			this.tail.link = new LinkedListNode(data);
+			this.tail = this.tail.link;
+		}	
 	}
 	
 	public Object dequeue() {
 		
-		Object data = this.head.data;
-		this.head = this.head.link;
-		
-		return data;
-		
+		if(this.head != null) {
+			Object data = this.head.data;
+			this.head = this.head.link;
+			
+			return data;
+		} else {
+			return null;
+		}
 	} 
 	
 	public void printQueue() {

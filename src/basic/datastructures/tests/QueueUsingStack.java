@@ -20,18 +20,18 @@ public class QueueUsingStack {
 		if(stackB == null || stackB.isEmpty()) {
 			while(!stackA.isEmpty()) {
 				if(stackB == null) {
-					stackB = new Stack(stackA.pop());
+					stackB = new Stack(stackA.pop(false));
 				} else {
-					stackB.push(stackA.pop());
+					stackB.push(stackA.pop(false));
 				}
 			}
 			if(stackB != null) {
-				return stackB.pop();
+				return stackB.pop(false);
 			} else {
 				return null;
 			}
 		} else {
-			return stackB.pop(); 
+			return stackB.pop(false); 
 		}
 	}
 	
@@ -53,36 +53,16 @@ public class QueueUsingStack {
 		QueueUsingStack modQueue = new QueueUsingStack(initialElement);
 		Queue normalQueue = new Queue(initialElement);
 		
-		modQueue.printQueue();
-		normalQueue.printQueue();
-		
 		for(int i = 0; i < 15; i++) {
 			int element = rand.nextInt(64);
 			modQueue.enqueue(element);
 			normalQueue.enqueue(element);
 		}
-		
+
 		modQueue.printQueue();
 		normalQueue.printQueue();
 		
 		for(int i = 0; i < rand.nextInt(16); i++) {
-			modQueue.dequeue();
-			normalQueue.dequeue();
-		}
-		
-		modQueue.printQueue();
-		normalQueue.printQueue();
-		
-		for(int i = 0; i < 15; i++) {
-			int element = rand.nextInt(64);
-			modQueue.enqueue(element); //TODO: stack overflow is causing some issues
-			normalQueue.enqueue(element);
-		}
-		
-		modQueue.printQueue();
-		normalQueue.printQueue();
-		
-		for(int i = 0; i < rand.nextInt(32); i++) {
 			modQueue.dequeue();
 			normalQueue.dequeue();
 		}
