@@ -67,6 +67,7 @@ public class Stack {
 				System.out.print(array[index++] + " ");
 			}
 		}
+		System.out.println();
 	}
  
 	
