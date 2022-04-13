@@ -7,8 +7,13 @@ public class SinglyLinkedList {
 	public LinkedListNode head;
 	public LinkedListNode last;
 	
-	SinglyLinkedList(Object data) {
+	public SinglyLinkedList(Object data) {
 		this.head = new LinkedListNode(data);
+		this.last = this.head;
+	}
+	
+	public SinglyLinkedList(LinkedListNode node) {
+		this.head = node;
 		this.last = this.head;
 	}
 	
@@ -16,6 +21,11 @@ public class SinglyLinkedList {
 		LinkedListNode newNode = new LinkedListNode(data);
 		this.last.link = newNode;
 		this.last = newNode;
+	}
+	
+	public void insertNode(LinkedListNode node) {
+		this.last.link = node;
+		this.last = node;
 	}
 	
 	/**
