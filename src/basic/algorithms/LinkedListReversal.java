@@ -9,8 +9,6 @@ import java.util.Random;
  */
 public class LinkedListReversal {
 	
-	private static SinglyLinkedList sll;
-	
 	public static void main(String[] args) {
 		
 		Random rand = new Random();
@@ -19,32 +17,28 @@ public class LinkedListReversal {
 		for(int i = 0; i < 15; i++) {
 			ll.insertNode(rand.nextInt(64));
 		}
-		
-		reverse(ll);
-		
+
 		ll.printList();
-		sll.printList();
+		
+		reverse(ll).printList();
+
 	}
 
-	public static void reverse(SinglyLinkedList ll) {
-		LinkedListNode temp = reverse(ll.head);
-		if(sll != null) {
-			sll.insertNode(temp.data);
-		} else {
-			sll = new SinglyLinkedList(temp.data);
-		}
+	public static SinglyLinkedList reverse(SinglyLinkedList ll) {
+		SinglyLinkedList sll = new SinglyLinkedList();
+		LinkedListNode temp = reverse(ll.head, sll);
+		
+		sll.insertNode(temp.data);
 		sll.last.link = null;
+		
+		return sll;
 	}
 	
-	private static LinkedListNode reverse(LinkedListNode node) {
+	private static LinkedListNode reverse(LinkedListNode node, SinglyLinkedList clone) {
 		
 		if(node.link != null) {
-			LinkedListNode temp = reverse(node.link);
-			if(sll == null) {
-				sll = new SinglyLinkedList(temp.data);
-			} else {
-				sll.insertNode(temp.data);
-			}
+			LinkedListNode temp = reverse(node.link, clone);
+			clone.insertNode(temp.data);
 		} 	
 		return node;
 	}

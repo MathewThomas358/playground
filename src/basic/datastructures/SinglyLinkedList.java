@@ -17,10 +17,19 @@ public class SinglyLinkedList {
 		this.last = this.head;
 	}
 	
+	public SinglyLinkedList() {
+		// Do Nothing
+	}
+
 	public void insertNode(Object data) {
-		LinkedListNode newNode = new LinkedListNode(data);
-		this.last.link = newNode;
-		this.last = newNode;
+		if(head == null) {
+			this.head = new LinkedListNode(data);
+			this.last = this.head;
+		} else {
+			LinkedListNode newNode = new LinkedListNode(data);
+			this.last.link = newNode;
+			this.last = newNode;
+		}
 	}
 	
 	public void insertNode(LinkedListNode node) {
