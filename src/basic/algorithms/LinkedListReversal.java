@@ -3,10 +3,7 @@ package basic.algorithms;
 import basic.datastructures.*;
 import java.util.Random;
 
-/**
- * Takes O(n) time and space to reverse a linked list.
- *
- */
+
 public class LinkedListReversal {
 	
 	public static void main(String[] args) {
@@ -14,13 +11,23 @@ public class LinkedListReversal {
 		Random rand = new Random();
 		SinglyLinkedList ll = new SinglyLinkedList(rand.nextInt(64));
 		
+		
 		for(int i = 0; i < 15; i++) {
 			ll.insertNode(rand.nextInt(64));
 		}
 
 		ll.printList();
 		
+		/**
+		 * Takes O(n) time and space to reverse a linked list.
+		 *
+		 */
 		reverse(ll).printList();
+		
+		/*
+		 * Takes O(1) space i.e. reusing the input space
+		 */
+		reverse(ll, ll.head).printList();
 
 	}
 
@@ -43,4 +50,25 @@ public class LinkedListReversal {
 		return node;
 	}
 
+	
+	private static LinkedListNode reverse(LinkedListNode current, LinkedListNode link, SinglyLinkedList ll) {
+	
+		if(link != null) {
+			LinkedListNode temp = reverse(current.link, current.link.link, ll);
+			temp.link = current;
+		} else {
+			ll.head = current;
+		}
+		return current;
+	}
+	
+	private static SinglyLinkedList reverse(SinglyLinkedList ll, LinkedListNode head) {
+		
+		if(ll != null && head != null) {
+			LinkedListNode tail = reverse(ll.head, ll.head.link, ll);
+			tail.link = null; 
+		}
+		
+		return ll;
+	}
 }
